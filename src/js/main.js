@@ -1,5 +1,5 @@
 // import '../css/style.scss';
-// import { radian, random } from './utils';
+import { radian } from './utils';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { VivianiCurve } from "three/examples/jsm/curves/CurveExtras.js"
@@ -30,6 +30,7 @@ class Main {
 
     this.percentage = 0;
 
+    
     this._init();
     this._update();
     this._addEvent();
@@ -63,25 +64,28 @@ class Main {
 
   _setCurve() {
     this.curveLine = new THREE.CatmullRomCurve3([
-      new THREE.Vector3( 0, - 40, - 40 ),
-      new THREE.Vector3( 0, 40, - 40 ),
-      new THREE.Vector3( 0, 100, - 40 ),
-      new THREE.Vector3( 0, 40, 40 ),
-      new THREE.Vector3( 0, - 40, 40 )
+      // new THREE.Vector3( 0, - 40, - 40 ),
+      // new THREE.Vector3( 0, 40, - 40 ),
+      // new THREE.Vector3( 0, 100, - 40 ),
+      // new THREE.Vector3( 0, 40, 40 ),
+      // new THREE.Vector3( 0, - 40, 40 )
+      new THREE.Vector3( 40, 20, 40 ),
+      new THREE.Vector3( -40, 0, 40 ),
+      // new THREE.Vector3( -30, -10, 30 ),
+      new THREE.Vector3( -50, 0, -50 ),
+      new THREE.Vector3( 50, 0, -50 ),
     ]);
     this.curveLine.curveType = 'catmullrom';
     this.curveLine.curveType = 'chordal';
     this.curveLine.closed = true;
     this.curveLine.tension = 20.0;
 
-
-
     this.curveLineVivian = new VivianiCurve( 70 );
   }
 
   _addMesh() {
-    // const geometry = new THREE.BoxGeometry(50, 50, 50);
-    const geometry = new THREE.TubeGeometry(this.curveLineVivian, 100, 4, 10, false);
+    // const geometry = new THREE.TubeGeometry(this.curveLineVivian, 100, 4, 10, false);
+    const geometry = new THREE.TubeGeometry(this.curveLine, 100, 4, 10, false);
     const material = new THREE.MeshStandardMaterial({color: 0x444444, wireframe: true });
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
@@ -96,24 +100,15 @@ class Main {
   }
 
   _update() {
-    // this.mesh.rotation.y += 0.01;
-    // this.mesh.rotation.x += 0.01;
-
     this.percentage += 0.001;
 
-    let p1 = this.curveLineVivian.getPoint(this.percentage%1);
+    // let p1 = this.curveLineVivian.getPoint(this.percentage%1);
     // let p2 = this.curveLineVivian.getPointAt((this.percentage + 0.01)%1);
-    let p2 = this.curveLineVivian.getPoint((this.percentage + 0.01)%1);
+    let p1 = this.curveLine.getPoint(this.percentage%1);
+    let p2 = this.curveLine.getPointAt((this.percentage + 0.03)%1);
 
     this.camera.position.set(p1.x, p1.y, p1.z);
     this.camera.lookAt(p2);
-
-    // カメラの位置と向きをスムーズに変更
-    // this.camera.position.lerp(p1, 0.1);
-    // const direction = new THREE.Vector3().subVectors(p2, p1).normalize();
-    // this.camera.lookAt(p1.clone().add(direction));
-
-    
 
 
     //レンダリング
