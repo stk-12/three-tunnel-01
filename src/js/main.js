@@ -33,7 +33,7 @@ class Main {
 
     this.percentage = 0;
 
-
+    this.speed = 0.0005;
     
     this._init();
     // this._update();
@@ -107,13 +107,17 @@ class Main {
 
   _addMesh() {
     // const geometry = new THREE.TubeGeometry(this.curveLineVivian, 100, 4, 10, false);
-    const geometry = new THREE.TubeGeometry(this.curveLine, 100, 4, 24, false);
+    const geometry = new THREE.TubeGeometry(this.curveLine, 100, 4, 36, false);
     const material = new THREE.MeshBasicMaterial({
       // color: 0x444444,
       // wireframe: true,
       side: THREE.BackSide,
       map: this.texture,
     });
+    // material.map.wrapS = THREE.RepeatWrapping;
+    // material.map.wrapT = THREE.RepeatWrapping;
+    // material.map.repeat.set(12, 3);
+
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
   }
@@ -132,7 +136,7 @@ class Main {
   }
 
   _update() {
-    this.percentage += 0.001;
+    this.percentage += this.speed;
 
     // let p1 = this.curveLineVivian.getPoint(this.percentage%1);
     // let p2 = this.curveLineVivian.getPointAt((this.percentage + 0.01)%1);
@@ -149,6 +153,14 @@ class Main {
     requestAnimationFrame(this._update.bind(this));
   }
 
+  _onMouseDown() {
+    this.speed = 0.008;
+  }
+
+  _onMouseUp() {
+    this.speed = 0.0005;
+  }
+
   _onResize() {
     this.viewport = {
       width: window.innerWidth,
@@ -163,6 +175,9 @@ class Main {
 
   _addEvent() {
     window.addEventListener("resize", this._onResize.bind(this));
+
+    window.addEventListener("mousedown", this._onMouseDown.bind(this));
+    window.addEventListener("mouseup", this._onMouseUp.bind(this));
   }
 }
 
