@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 :root {
 }
 
 body {
+  font-family: 'Bebas Neue', cursive;
   overflow: hidden;
   background: #666;
 }
@@ -9,4 +12,28 @@ body {
 * {
   margin: 0;
   padding: 0;
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 80px;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 20px;
+}
+
+.btn {
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% - 40px);
+  width: 80px;
+  height: 80px;
+  border: 1px solid #fff;
+  background: none;
+  color: #fff;
+  font-size: 24px;
+  border-radius: 50%;
+  font-family: 'Bebas Neue', cursive;
+  cursor: pointer;
 }

@@ -13,6 +13,7 @@ class Main {
     };
 
     this.canvas = document.querySelector("#canvas");
+    this.btn = document.querySelector('.btn');
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -34,6 +35,12 @@ class Main {
     this.percentage = 0;
 
     this.speed = 0.0005;
+
+    this.targetSpeed = 0.0005;
+    this.currentSpeed = this.speed;
+    this.speedIncrement = 0.00005;
+
+
     
     this._init();
     // this._update();
@@ -45,6 +52,12 @@ class Main {
       this.loader.load(
         url,
         (texture) => {
+          // テクスチャの境界線の調整
+          texture.wrapS = THREE.RepeatWrapping;
+          texture.wrapT = THREE.RepeatWrapping;
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+
           resolve(texture);
         },
         undefined,
@@ -107,9 +120,9 @@ class Main {
 
   _addMesh() {
     // const geometry = new THREE.TubeGeometry(this.curveLineVivian, 100, 4, 10, false);
-    const geometry = new THREE.TubeGeometry(this.curveLine, 100, 4, 36, false);
+    const geometry = new THREE.TubeGeometry(this.curveLine, 200, 4, 36, false);
     const material = new THREE.MeshBasicMaterial({
-      // color: 0x444444,
+      // color: 0x666666,
       // wireframe: true,
       side: THREE.BackSide,
       map: this.texture,
@@ -136,7 +149,14 @@ class Main {
   }
 
   _update() {
-    this.percentage += this.speed;
+    // 徐々にスピードアップ
+    if (this.currentSpeed < this.targetSpeed) {
+      this.currentSpeed = Math.min(this.currentSpeed + this.speedIncrement, this.targetSpeed);
+    } else if (this.currentSpeed > this.targetSpeed) {
+      this.currentSpeed = Math.max(this.currentSpeed - this.speedIncrement, this.targetSpeed);
+    }
+
+    this.percentage += this.currentSpeed;
 
     // let p1 = this.curveLineVivian.getPoint(this.percentage%1);
     // let p2 = this.curveLineVivian.getPointAt((this.percentage + 0.01)%1);
@@ -154,11 +174,11 @@ class Main {
   }
 
   _onMouseDown() {
-    this.speed = 0.008;
+    this.targetSpeed = 0.009;
   }
 
   _onMouseUp() {
-    this.speed = 0.0005;
+    this.targetSpeed = 0.0005;
   }
 
   _onResize() {
@@ -176,7 +196,7 @@ class Main {
   _addEvent() {
     window.addEventListener("resize", this._onResize.bind(this));
 
-    window.addEventListener("mousedown", this._onMouseDown.bind(this));
+    this.btn.addEventListener("mousedown", this._onMouseDown.bind(this));
     window.addEventListener("mouseup", this._onMouseUp.bind(this));
   }
 }
