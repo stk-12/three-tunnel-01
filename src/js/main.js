@@ -1,5 +1,6 @@
 // import '../css/style.scss';
 import { radian } from './utils';
+import { FilterAnimation } from './filterAnimation';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { VivianiCurve } from "three/examples/jsm/curves/CurveExtras.js"
@@ -40,7 +41,7 @@ class Main {
     this.currentSpeed = this.speed;
     this.speedIncrement = 0.00005;
 
-
+    this.filterAnimation = new FilterAnimation();
     
     this._init();
     // this._update();
@@ -146,6 +147,8 @@ class Main {
     this._addMesh();
     this._update();
     this._addEvent();
+
+    this.filterAnimation.init();
   }
 
   _update() {
