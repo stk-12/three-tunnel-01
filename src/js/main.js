@@ -1,6 +1,7 @@
 // import '../css/style.scss';
 import { radian } from './utils';
 import { FilterAnimation } from './filterAnimation';
+import { MouseStalker } from './mousestalker';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { VivianiCurve } from "three/examples/jsm/curves/CurveExtras.js"
@@ -14,7 +15,7 @@ class Main {
     };
 
     this.canvas = document.querySelector("#canvas");
-    this.btn = document.querySelector('.btn');
+    // this.btn = document.querySelector('.btn');
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -42,6 +43,8 @@ class Main {
     this.speedIncrement = 0.00005;
 
     this.filterAnimation = new FilterAnimation();
+
+    this.mouseStalker = new MouseStalker();
     
     this._init();
     // this._update();
@@ -170,6 +173,8 @@ class Main {
     this.camera.lookAt(p2);
 
 
+    this.mouseStalker.update();
+
     //レンダリング
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
@@ -199,7 +204,7 @@ class Main {
   _addEvent() {
     window.addEventListener("resize", this._onResize.bind(this));
 
-    this.btn.addEventListener("mousedown", this._onMouseDown.bind(this));
+    window.addEventListener("mousedown", this._onMouseDown.bind(this));
     window.addEventListener("mouseup", this._onMouseUp.bind(this));
   }
 }
